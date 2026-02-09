@@ -169,4 +169,4 @@ Smart Pickup aims to make waste collection more efficient, transparent, and reli
 ----------
 
 **Team TrashTech**  
-Sibiraj • Harish
+Sibiraj • Harish.

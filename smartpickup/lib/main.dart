@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const SmartPickupApp());
 }
 
@@ -17,19 +24,13 @@ class SmartPickupApp extends StatelessWidget {
   }
 }
 
-class PickupHome extends StatefulWidget {
+class PickupHome extends StatelessWidget {
   const PickupHome({super.key});
 
-  @override
-  State<PickupHome> createState() => _PickupHomeState();
-}
-
-class _PickupHomeState extends State<PickupHome> {
-  int pickupCount = 0;
-
   void bookPickup() {
-    setState(() {
-      pickupCount++;
+    FirebaseFirestore.instance.collection("pickups").add({
+      "status": "booked",
+      "time": Timestamp.now(),
     });
   }
 
@@ -37,24 +38,34 @@ class _PickupHomeState extends State<PickupHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("SmartPickup")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.local_shipping, size: 80, color: Colors.green),
-            const SizedBox(height: 20),
-            const Text("Total Pickups Booked:", style: TextStyle(fontSize: 18)),
-            Text(
-              "$pickupCount",
-              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: bookPickup,
-              child: const Text("Book Pickup"),
-            )
-          ],
-        ),
+
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection("pickups")
+            .orderBy("time", descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final docs = snapshot.data!.docs;
+
+          return ListView(
+            children: docs.map((doc) {
+              return ListTile(
+                title: const Text("Pickup booked"),
+                subtitle: Text(doc["time"].toString()),
+              );
+            }).toList(),
+          );
+        },
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: bookPickup,
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.add, color: Colors.white), 
       ),
     );
   }

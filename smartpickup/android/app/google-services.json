@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "164456287439",
+    "project_id": "smartpickup-28fe0",
+    "storage_bucket": "smartpickup-28fe0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164456287439:android:96e3af2204506bb050fbba",
+        "android_client_info": {
+          "package_name": "com.example.smartpickup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzHfFurdR0BW0L-enWf3mj5yz9kW9uD3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

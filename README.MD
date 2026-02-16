@@ -170,3 +170,43 @@ Smart Pickup aims to make waste collection more efficient, transparent, and reli
 
 **Team TrashTech**  
 Sibiraj • Harish
+
+---
+
+## 3.8 Introduction to Flutter & Dart
+
+## 📱 SmartPickup Flutter App
+
+SmartPickup is a smart waste pickup booking mobile app built using Flutter.
+
+### 📁 Folder Structure
+
+-   **main.dart** → app entry point
+    
+-   **screens/** → all app screens
+    
+-   **widgets/** → reusable UI components
+    
+-   **models/** → data models
+    
+-   **services/** → API/Firebase logic
+    
+
+This structure helps keep code modular and scalable.
+
+### ⚙️ Setup
+
+`flutter pub get
+flutter run` 
+
+### 💡 What I learned
+
+-   Flutter uses widgets for UI
+    
+-   Stateful widgets update UI dynamically
+    
+-   Dart is fast and easy for UI development
+    
+-   Folder structure helps scale app later
+
+---

@@ -241,3 +241,65 @@ flutter run`
 
 
 ---
+
+## 3.9 Building Responsive Mobile Interfaces:
+
+# 📱 SmartPickup – Responsive Flutter UI
+
+This task demonstrates a responsive Flutter interface integrated with Firebase Firestore.  
+The screen adapts to different device sizes (phone and tablet) and orientations while showing real-time pickup bookings.
+
+## 🚀 Features
+
+-   Firebase Firestore real-time pickup booking
+    
+-   Responsive layout using **MediaQuery**
+    
+-   Phone → single column list view
+    
+-   Tablet → grid layout
+    
+-   Works in portrait & landscape
+    
+-   Add pickup button updates UI instantly
+    
+
+## 📱 Responsive Logic Used
+
+`double width = MediaQuery.of(context).size.width;
+bool isTablet = width > 600;` 
+
+-   Width < 600 → phone layout
+    
+-   Width > 600 → tablet grid layout
+    
+
+Grid changes based on orientation using screen width & height.
+
+## 🛠 Tech Stack
+
+-   Flutter
+    
+-   Dart
+    
+-   Firebase Core
+    
+-   Cloud Firestore
+    
+
+## 🧪 Testing
+
+Tested on:
+
+-   Android emulator (phone view)
+    
+-   Tablet width using Chrome resize
+    
+-   Portrait & landscape modes
+    
+
+## 💡 Reflection
+
+Making the layout responsive required adjusting padding, text size, and switching between list and grid views based on screen width. Responsive design improves usability by ensuring the app looks clean and readable across phones, tablets, and different orientations.
+
+---

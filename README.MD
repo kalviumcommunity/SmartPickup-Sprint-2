@@ -171,4 +171,135 @@ Smart Pickup aims to make waste collection more efficient, transparent, and reli
 **Team TrashTech**  
 Sibiraj • Harish
 
-----
+---
+
+## 3.8 Introduction to Flutter & Dart
+
+## 📱 SmartPickup Flutter App
+
+SmartPickup is a smart waste pickup booking mobile app built using Flutter.
+
+### 📁 Folder Structure
+
+-   **main.dart** → app entry point
+    
+-   **screens/** → all app screens
+    
+-   **widgets/** → reusable UI components
+    
+-   **models/** → data models
+    
+-   **services/** → API/Firebase logic
+    
+
+This structure helps keep code modular and scalable.
+
+### ⚙️ Setup
+
+`flutter pub get
+flutter run` 
+
+### 💡 What I learned
+
+-   Flutter uses widgets for UI
+    
+-   Stateful widgets update UI dynamically
+    
+-   Dart is fast and easy for UI development
+    
+-   Folder structure helps scale app later
+
+---
+
+## 3.4 Introduction to Firebase Services and Real-Time Data Integration
+
+📘 What we did in this module
+
+- Set up a Flutter project and ran it successfully
+
+- Connected the app with Firebase
+
+- Configured Cloud Firestore database
+
+- Created a collection called pickups
+
+- Added functionality to book a pickup using the + button
+
+- Stored pickup data in Firestore with:
+    
+    - status
+    
+    - timestamp
+
+- Fetched data from Firestore
+
+- Displayed all pickup bookings in the app UI
+
+- Enabled real-time updates (new pickups appear instantly)
+
+- Tested the app by running it on Chrome and emulator
+
+
+---
+
+## 3.9 Building Responsive Mobile Interfaces:
+
+# 📱 SmartPickup – Responsive Flutter UI
+
+This task demonstrates a responsive Flutter interface integrated with Firebase Firestore.  
+The screen adapts to different device sizes (phone and tablet) and orientations while showing real-time pickup bookings.
+
+## 🚀 Features
+
+-   Firebase Firestore real-time pickup booking
+    
+-   Responsive layout using **MediaQuery**
+    
+-   Phone → single column list view
+    
+-   Tablet → grid layout
+    
+-   Works in portrait & landscape
+    
+-   Add pickup button updates UI instantly
+    
+
+## 📱 Responsive Logic Used
+
+`double width = MediaQuery.of(context).size.width;
+bool isTablet = width > 600;` 
+
+-   Width < 600 → phone layout
+    
+-   Width > 600 → tablet grid layout
+    
+
+Grid changes based on orientation using screen width & height.
+
+## 🛠 Tech Stack
+
+-   Flutter
+    
+-   Dart
+    
+-   Firebase Core
+    
+-   Cloud Firestore
+    
+
+## 🧪 Testing
+
+Tested on:
+
+-   Android emulator (phone view)
+    
+-   Tablet width using Chrome resize
+    
+-   Portrait & landscape modes
+    
+
+## 💡 Reflection
+
+Making the layout responsive required adjusting padding, text size, and switching between list and grid views based on screen width. Responsive design improves usability by ensuring the app looks clean and readable across phones, tablets, and different orientations.
+
+---

@@ -303,3 +303,17 @@ Tested on:
 Making the layout responsive required adjusting padding, text size, and switching between list and grid views based on screen width. Responsive design improves usability by ensuring the app looks clean and readable across phones, tablets, and different orientations.
 
 ---
+
+## 3.10 Firebase Integration: Authentication & Firestore
+
+- SmartPickup is a Flutter mobile app connected with Firebase Authentication and Cloud Firestore.
+
+- Users can sign up, log in, and book waste pickups through a responsive dashboard.
+
+- Pickup data is stored in Firestore and updates in real time.
+
+- Firebase provides secure login and scalable cloud storage without a custom backend.
+
+- The project demonstrates building a responsive, cloud-connected Flutter application.
+
+---

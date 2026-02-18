@@ -304,6 +304,7 @@ Making the layout responsive required adjusting padding, text size, and switchin
 
 ---
 
+
 ## 3.10 Firebase Integration: Authentication & Firestore
 
 - SmartPickup is a Flutter mobile app connected with Firebase Authentication and Cloud Firestore.

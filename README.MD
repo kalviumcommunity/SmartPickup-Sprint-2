@@ -317,3 +317,20 @@ Making the layout responsive required adjusting padding, text size, and switchin
 - The project demonstrates building a responsive, cloud-connected Flutter application.
 
 ---
+## 3.11 Setting Up Flutter SDK, Android Studio, and First Emulator Run
+
+# Flutter Environment Setup and First App Run
+
+## Steps Followed
+- Installed Flutter SDK and added to PATH
+- Installed Android Studio and required SDK tools
+- Created and launched Pixel 4 emulator
+- Verified setup using flutter doctor
+- Ran Flutter app using flutter run
+
+## Reflection
+I successfully set up Flutter, Android Studio, and emulator.  
+Initially faced minor setup issues but resolved them using flutter doctor.  
+Now I can build and test mobile apps directly on emulator which will help in future Flutter + Firebase projects.
+
+---

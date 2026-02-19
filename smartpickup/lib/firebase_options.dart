@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'smartpickup-28fe0.firebaseapp.com',
     storageBucket: 'smartpickup-28fe0.firebasestorage.app',
   );
+
 }

@@ -334,3 +334,26 @@ Initially faced minor setup issues but resolved them using flutter doctor.
 Now I can build and test mobile apps directly on emulator which will help in future Flutter + Firebase projects.
 
 ---
+
+## 3.12 Exploring Flutter Project Folder Structure and Understanding File Roles
+
+## Overview
+This project explores the default folder structure of a Flutter application and explains the purpose of each important folder and configuration file. Understanding this structure helps in organizing code, managing assets, and building scalable Flutter apps.
+
+## Key Folders
+- **lib/** – Main source code folder containing `main.dart`, screens, widgets, services, and models.
+- **android/** – Android-specific build files, Gradle configs, and manifest.
+- **ios/** – iOS configuration files used by Xcode for building the app.
+- **assets/** – Stores images, fonts, and static files (declared in `pubspec.yaml`).
+- **test/** – Contains unit and widget test files.
+
+## Important Files
+- **pubspec.yaml** – Manages dependencies, assets, fonts, and project settings.
+- **README.md** – Project documentation and setup instructions.
+- **.gitignore** – Files and folders ignored by Git.
+- **build/** – Auto-generated compiled build files.
+
+## Why This Matters
+A clean project structure improves readability, teamwork, and scalability. It helps developers quickly find files, manage features efficiently, and maintain the app as it grows.
+
+---

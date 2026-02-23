@@ -357,3 +357,42 @@ This project explores the default folder structure of a Flutter application and 
 A clean project structure improves readability, teamwork, and scalability. It helps developers quickly find files, manage features efficiently, and maintain the app as it grows.
 
 ---
+
+## 3.19 Applying Consistent Styles, Colors, and Text Themes Across the App
+
+## 📖 Overview
+- Implemented scrollable UI using **ListView** and **GridView** in Flutter.
+- Demonstrates horizontal and vertical scrolling layouts.
+- Built as part of Sprint-2 task for learning scrollable widgets.
+
+---
+
+## ✨ Features
+- Horizontal **ListView.builder()** for dynamic cards.
+- Vertical **GridView.builder()** with 2-column layout.
+- Combined both using **SingleChildScrollView**.
+- Smooth scrolling with no overflow errors.
+- Clean navigation after login.
+
+---
+
+## 🛠 Widgets Used
+- `ListView.builder`
+- `GridView.builder`
+- `SingleChildScrollView`
+- `SliverGridDelegateWithFixedCrossAxisCount`
+- `Navigator.pushReplacement`
+
+---
+
+## 🤔 Reflection
+- **ListView vs GridView:**  
+  ListView shows items in a single direction, while GridView shows items in rows and columns.
+
+- **Why use builder?**  
+  It builds only visible items, improving performance and memory usage.
+
+- **Avoid overflow/lag:**  
+  Use `.builder()`, `shrinkWrap`, proper height, and avoid nested scrolling issues.
+
+---

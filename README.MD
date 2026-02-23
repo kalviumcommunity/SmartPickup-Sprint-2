@@ -357,6 +357,7 @@ This project explores the default folder structure of a Flutter application and 
 A clean project structure improves readability, teamwork, and scalability. It helps developers quickly find files, manage features efficiently, and maintain the app as it grows.
 
 ---
+
 ## 3.19 Applying Consistent Styles, Colors, and Text Themes Across the App
 
 ## 📖 Overview

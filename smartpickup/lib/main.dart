@@ -4,7 +4,9 @@ import 'firebase_options.dart';
 
 // Screens
 import 'screens/login_screen.dart';
+import 'screens/home_screen.dart';
 import 'screens/scrollable_views.dart';
+import 'screens/user_input_form.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,13 +32,15 @@ class SmartPickupApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
       ),
 
-      // 🔹 First screen
+      /// 🔹 First screen
       home: const LoginScreen(),
 
-      // 🔹 App routes (clean navigation)
+      /// 🔹 Routes
       routes: {
         '/login': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(),
         '/scroll': (context) => const ScrollableViews(),
+        '/form': (context) => const UserInputForm(), // assignment screen
       },
     );
   }

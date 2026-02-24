@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'signup_screen.dart';
-import 'scrollable_views.dart';
+import 'home_screen.dart'; // ✅ go to home after login
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,11 +26,11 @@ class _LoginState extends State<LoginScreen> {
     setState(() => loading = false);
 
     if (user != null) {
-      // ✅ Navigate to ScrollableViews after login
+      /// ✅ GO TO HOME SCREEN
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => const ScrollableViews(),
+          builder: (_) => const HomeScreen(),
         ),
       );
     } else {

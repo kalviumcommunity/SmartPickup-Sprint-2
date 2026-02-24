@@ -396,3 +396,28 @@ A clean project structure improves readability, teamwork, and scalability. It he
   Use `.builder()`, `shrinkWrap`, proper height, and avoid nested scrolling issues.
 
 ---
+
+## 3.20 Handling User Input with TextFields, Buttons, and Form Widgets
+
+## 📱 Overview
+This assignment demonstrates how to handle user input in Flutter using **TextFormField, Buttons, and Form validation**.  
+A simple form is created to collect user details and validate them before submission.
+
+---
+
+## 🧩 Features
+- Name field (required)
+- Email field (required + format validation)
+- Submit button
+- Error messages for invalid input
+- Success message using SnackBar
+
+---
+
+## 🛠 Implementation
+- Created `user_input_form.dart` in `lib/screens`
+- Used `Form` with `GlobalKey<FormState>`
+- Added validation inside `TextFormField`
+- Submit button checks validation and shows feedback
+
+---

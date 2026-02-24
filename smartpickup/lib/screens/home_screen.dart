@@ -45,13 +45,26 @@ class HomeScreen extends StatelessWidget {
           final docs = snapshot.data!.docs;
 
           return ListView(
-            children: docs.map((doc) {
-              return ListTile(
-                leading: const Icon(Icons.local_shipping),
-                title: Text("Pickup booked"),
-                subtitle: Text(doc["time"].toDate().toString()),
-              );
-            }).toList(),
+            children: [
+              /// 🔹 assignment form button
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/form');
+                  },
+                  child: const Text("Open User Input Form"),
+                ),
+              ),
+
+              ...docs.map((doc) {
+                return ListTile(
+                  leading: const Icon(Icons.local_shipping),
+                  title: const Text("Pickup booked"),
+                  subtitle: Text(doc["time"].toDate().toString()),
+                );
+              })
+            ],
           );
         },
       ),

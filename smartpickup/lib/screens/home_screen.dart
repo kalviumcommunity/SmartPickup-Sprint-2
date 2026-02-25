@@ -24,12 +24,15 @@ class HomeScreen extends StatelessWidget {
         title: const Text("SmartPickup"),
         actions: [
           IconButton(
-              onPressed: () async {
-                await auth.logout();
-                Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (_) => const LoginScreen()));
-              },
-              icon: const Icon(Icons.logout))
+            onPressed: () async {
+              await auth.logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+              );
+            },
+            icon: const Icon(Icons.logout),
+          )
         ],
       ),
 
@@ -40,13 +43,16 @@ class HomeScreen extends StatelessWidget {
             .orderBy("time", descending: true)
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
           final docs = snapshot.data!.docs;
 
           return ListView(
             children: [
-              /// 🔹 assignment form button
+
+              /// FORM ASSIGNMENT
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: ElevatedButton(
@@ -54,6 +60,17 @@ class HomeScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/form');
                   },
                   child: const Text("Open User Input Form"),
+                ),
+              ),
+
+              /// SCROLLABLE ASSIGNMENT
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/scroll');
+                  },
+                  child: const Text("Open Scrollable Views"),
                 ),
               ),
 

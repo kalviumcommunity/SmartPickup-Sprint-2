@@ -420,3 +420,15 @@ A simple form is created to collect user details and validate them before submis
 - Submit button checks validation and shows feedback
 
 ---
+## 3.18 Scrollable Views with ListView & GridView
+
+## 📌 Overview
+This screen demonstrates how to build scrollable user interfaces in Flutter using `ListView.builder` and `GridView.builder` for efficient and dynamic layouts.
+
+## 🚀 Implementation
+- Used **ListView.builder** to create a horizontal scrolling list of cards.
+- Used **GridView.builder** to display items in a 2-column responsive grid layout.
+- Applied proper spacing, shrinkWrap, and physics for smooth scrolling performance.
+
+## 🎯 Learning Outcome
+This implementation improves UI efficiency by rendering only visible items, ensuring smooth scrolling and better memory management for large datasets.

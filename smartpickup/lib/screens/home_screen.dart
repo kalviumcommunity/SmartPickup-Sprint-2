@@ -90,6 +90,15 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () => Navigator.pushNamed(context, '/widgets-demo'),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: CustomButton(
+                  label: 'Open Responsive Design Demo',
+                  icon: Icons.devices,
+                  color: Colors.deepPurple,
+                  onPressed: () => Navigator.pushNamed(context, '/responsive'),
+                ),
+              ),
 
               const Padding(
                 padding: EdgeInsets.fromLTRB(16, 20, 16, 8),

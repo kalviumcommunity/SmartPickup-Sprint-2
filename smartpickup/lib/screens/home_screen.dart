@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/auth_service.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/info_card.dart';
 import 'login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -50,48 +52,76 @@ class HomeScreen extends StatelessWidget {
           final docs = snapshot.data!.docs;
 
           return ListView(
+            padding: const EdgeInsets.only(top: 12, bottom: 24),
             children: [
-
-              /// FORM ASSIGNMENT
+              // ── Sprint assignment navigation ─────────────────────────
               Padding(
-                padding: const EdgeInsets.all(12),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/form');
-                  },
-                  child: const Text("Open User Input Form"),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: CustomButton(
+                  label: 'Open User Input Form',
+                  icon: Icons.edit_note,
+                  onPressed: () => Navigator.pushNamed(context, '/form'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: CustomButton(
+                  label: 'Open Scrollable Views',
+                  icon: Icons.list_alt,
+                  color: Colors.teal,
+                  onPressed: () => Navigator.pushNamed(context, '/scroll'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: CustomButton(
+                  label: 'Open State Management Demo',
+                  icon: Icons.tune,
+                  color: Colors.indigo,
+                  onPressed: () => Navigator.pushNamed(context, '/state-demo'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: CustomButton(
+                  label: 'Open Custom Widgets Demo',
+                  icon: Icons.widgets_outlined,
+                  color: Colors.orange,
+                  onPressed: () => Navigator.pushNamed(context, '/widgets-demo'),
                 ),
               ),
 
-              /// SCROLLABLE ASSIGNMENT
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/scroll');
-                  },
-                  child: const Text("Open Scrollable Views"),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
+                child: Text(
+                  'Your Pickups',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1E1E2E),
+                  ),
                 ),
               ),
 
-              /// STATE MANAGEMENT ASSIGNMENT
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/state-demo');
-                  },
-                  child: const Text("Open State Management Demo"),
+              if (docs.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 32),
+                  child: Center(
+                    child: Text(
+                      'No pickups yet. Tap + to book one!',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
                 ),
-              ),
 
               ...docs.map((doc) {
-                return ListTile(
-                  leading: const Icon(Icons.local_shipping),
-                  title: const Text("Pickup booked"),
-                  subtitle: Text(doc["time"].toDate().toString()),
+                return InfoCard(
+                  title: 'Pickup booked',
+                  subtitle: doc["time"].toDate().toString(),
+                  icon: Icons.local_shipping,
+                  iconColor: Colors.green,
                 );
-              })
+              }),
             ],
           );
         },

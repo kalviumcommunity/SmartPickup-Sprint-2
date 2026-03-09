@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_text_field.dart';
 import 'home_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -32,11 +34,32 @@ class _SignupState extends State<SignupScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(controller: email, decoration: const InputDecoration(labelText: "Email")),
-            TextField(controller: pass, decoration: const InputDecoration(labelText: "Password")),
+            const Icon(Icons.local_shipping, size: 80, color: Colors.green),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: signup, child: const Text("Signup")),
+            CustomTextField(
+              controller: email,
+              label: 'Email',
+              hint: 'you@example.com',
+              icon: Icons.email_outlined,
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 14),
+            CustomTextField(
+              controller: pass,
+              label: 'Password',
+              hint: 'Min 6 characters',
+              icon: Icons.lock_outline,
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            CustomButton(
+              label: 'Sign Up',
+              icon: Icons.person_add_outlined,
+              onPressed: signup,
+              width: double.infinity,
+            ),
           ],
         ),
       ),

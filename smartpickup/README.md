@@ -159,4 +159,205 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+---
+
+## Sprint 2 – Reusable Custom Widgets
+
+### What this sprint demonstrates
+
+`lib/widgets/` contains four custom widgets that are reused across multiple screens, keeping the UI code DRY and consistent.
+
+| Widget file | Type | Used in |
+|---|---|---|
+| `custom_button.dart` | `StatelessWidget` | `HomeScreen`, `LoginScreen`, `SignupScreen`, `CustomWidgetsDemo` |
+| `info_card.dart` | `StatelessWidget` | `HomeScreen` (pickup list), `CustomWidgetsDemo` |
+| `custom_text_field.dart` | `StatefulWidget` | `LoginScreen`, `SignupScreen`, `CustomWidgetsDemo` |
+| `like_button.dart` | `StatefulWidget` | `CustomWidgetsDemo` (3 post cards) |
+
+---
+
+### Widget definitions
+
+#### `CustomButton` — `lib/widgets/custom_button.dart`
+
+```dart
+class CustomButton extends StatelessWidget {
+  final String label;
+  final VoidCallback? onPressed;
+  final Color? color;
+  final IconData? icon;
+  final bool isLoading;
+  final double? width;
+
+  const CustomButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.color,
+    this.icon,
+    this.isLoading = false,
+    this.width,
+  });
+
+  @override
+  Widget build(BuildContext context) { ... }
+}
+```
+
+**Reused with different props across screens:**
+
+```dart
+// HomeScreen – book a pickup
+CustomButton(
+  label: 'Open Custom Widgets Demo',
+  icon: Icons.widgets_outlined,
+  color: Colors.orange,
+  onPressed: () => Navigator.pushNamed(context, '/widgets-demo'),
+),
+
+// LoginScreen – full-width with loading state
+CustomButton(
+  label: 'Login',
+  icon: Icons.login,
+  onPressed: loading ? null : login,
+  isLoading: loading,
+  width: double.infinity,
+),
+
+// CustomWidgetsDemo – cancel variant
+CustomButton(
+  label: 'Cancel Pickup',
+  icon: Icons.cancel_outlined,
+  color: Colors.redAccent,
+  onPressed: () { ... },
+),
+```
+
+---
+
+#### `InfoCard` — `lib/widgets/info_card.dart`
+
+```dart
+class InfoCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color? iconColor;
+  final VoidCallback? onTap;
+  final Widget? trailing;
+  ...
+}
+```
+
+**Reused across screens:**
+
+```dart
+// HomeScreen – each Firestore pickup document
+InfoCard(
+  title: 'Pickup booked',
+  subtitle: doc["time"].toDate().toString(),
+  icon: Icons.local_shipping,
+  iconColor: Colors.green,
+),
+
+// CustomWidgetsDemo – stats tiles
+InfoCard(
+  title: 'Total Pickups',
+  subtitle: '12 completed this month',
+  icon: Icons.local_shipping,
+  iconColor: Colors.green,
+  onTap: () {},
+),
+InfoCard(
+  title: 'Notifications',
+  subtitle: '2 unread alerts',
+  icon: Icons.notifications_outlined,
+  iconColor: Colors.purple,
+  trailing: Badge(label: Text('2')),
+),
+```
+
+---
+
+#### `CustomTextField` — `lib/widgets/custom_text_field.dart`
+
+A `StatefulWidget` that manages its own password-visibility toggle internally.
+
+```dart
+// LoginScreen
+CustomTextField(
+  controller: emailController,
+  label: 'Email',
+  icon: Icons.email_outlined,
+  keyboardType: TextInputType.emailAddress,
+),
+CustomTextField(
+  controller: passController,
+  label: 'Password',
+  icon: Icons.lock_outline,
+  obscureText: true,   // eye-icon toggle built in
+),
+
+// SignupScreen — identical fields, different controllers
+CustomTextField(controller: email, label: 'Email', ...),
+CustomTextField(controller: pass,  label: 'Password', obscureText: true, ...),
+```
+
+---
+
+#### `LikeButton` — `lib/widgets/like_button.dart`
+
+A self-contained `StatefulWidget` with a scale animation — drop it anywhere with no external state needed.
+
+```dart
+// Three independent instances on post cards
+LikeButton(initialCount: 18),
+LikeButton(initialCount: 5),
+LikeButton(initialCount: 31),
+```
+
+---
+
+### Screenshots
+
+> **HomeScreen** — navigation buttons now use `CustomButton`; pickup list uses `InfoCard`
+
+> **LoginScreen / SignupScreen** — inputs use `CustomTextField` with eye toggle; submit uses `CustomButton` with loading spinner
+
+> **CustomWidgetsDemo** — all four widgets displayed together:
+> - Four `CustomButton` variants (default, teal, red, loading)
+> - Four `InfoCard` instances (green, orange, teal, purple with badge)
+> - `CustomTextField` trio inside a validated form
+> - Three `LikeButton` instances on pickup post cards
+
+---
+
+### Reflection
+
+**1. How do reusable widgets improve development efficiency?**
+
+Instead of copy-pasting the same `ElevatedButton` or `TextField` decoration in every screen, a single widget file is the only place that needs to change. Updating the button's border-radius or adding an icon prefix propagates instantly to every screen — one edit, zero regressions.
+
+**2. What challenges did you face while designing modular components?**
+
+The main challenge was deciding which props to expose vs. hard-code. Too few parameters and the widget is inflexible (e.g., can't change colour per use-case); too many and the API becomes confusing. The sweet spot was exposing the most common variations (`color`, `icon`, `isLoading`) while providing sensible defaults.
+
+`CustomTextField`'s password-visibility toggle was also a good example of *encapsulating* stateful behaviour inside the widget itself so callers don't need to manage `_obscure` state.
+
+**3. How could your team apply this approach to your full project?**
+
+Every screen that shares a design element — pickup status badges, user avatars, map cards, rating stars — can become a widget in `lib/widgets/`. Combined with a shared `AppTheme` class for colours and text styles, the team can build new screens by composing small, tested building-blocks rather than writing raw Material widgets from scratch.
+
+---
+
+## Running locally
+
+```bash
+cd smartpickup
+flutter pub get
+flutter run          # connects to a running emulator / device
+# or
+flutter run -d linux # run on the Linux desktop target
+```
+
 ----

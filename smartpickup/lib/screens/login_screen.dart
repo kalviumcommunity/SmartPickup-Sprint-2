@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_text_field.dart';
 import 'signup_screen.dart';
-import 'home_screen.dart'; // ✅ go to home after login
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -59,36 +61,33 @@ class _LoginState extends State<LoginScreen> {
             const Icon(Icons.local_shipping, size: 80, color: Colors.green),
             const SizedBox(height: 20),
 
-            TextField(
+            CustomTextField(
               controller: emailController,
-              decoration: const InputDecoration(
-                labelText: "Email",
-                border: OutlineInputBorder(),
-              ),
+              label: 'Email',
+              hint: 'you@example.com',
+              icon: Icons.email_outlined,
+              keyboardType: TextInputType.emailAddress,
             ),
 
             const SizedBox(height: 15),
 
-            TextField(
+            CustomTextField(
               controller: passController,
+              label: 'Password',
+              hint: 'Enter your password',
+              icon: Icons.lock_outline,
               obscureText: true,
-              decoration: const InputDecoration(
-                labelText: "Password",
-                border: OutlineInputBorder(),
-              ),
             ),
 
             const SizedBox(height: 25),
 
-            loading
-                ? const CircularProgressIndicator()
-                : SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: login,
-                      child: const Text("Login"),
-                    ),
-                  ),
+            CustomButton(
+              label: 'Login',
+              icon: Icons.login,
+              onPressed: loading ? null : login,
+              isLoading: loading,
+              width: double.infinity,
+            ),
 
             const SizedBox(height: 10),
 

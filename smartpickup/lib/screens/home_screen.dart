@@ -74,6 +74,17 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
+              /// STATE MANAGEMENT ASSIGNMENT
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/state-demo');
+                  },
+                  child: const Text("Open State Management Demo"),
+                ),
+              ),
+
               ...docs.map((doc) {
                 return ListTile(
                   leading: const Icon(Icons.local_shipping),

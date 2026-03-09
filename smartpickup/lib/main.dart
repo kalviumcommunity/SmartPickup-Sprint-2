@@ -7,6 +7,7 @@ import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/scrollable_views.dart';
 import 'screens/user_input_form.dart';
+import 'screens/state_management_demo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +41,8 @@ class SmartPickupApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
         '/scroll': (context) => const ScrollableViews(),
-        '/form': (context) => const UserInputForm(), // assignment screen
+        '/form': (context) => const UserInputForm(),
+        '/state-demo': (context) => const StateManagementDemo(),
       },
     );
   }

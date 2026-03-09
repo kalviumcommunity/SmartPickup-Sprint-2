@@ -350,6 +350,147 @@ Every screen that shares a design element — pickup status badges, user avatars
 
 ---
 
+## Sprint 2 – Responsive Design with MediaQuery and LayoutBuilder
+
+### What this screen demonstrates
+
+`lib/screens/responsive_home.dart` is a fully responsive dashboard that adapts to **any screen size or orientation** using two Flutter tools:
+
+| Tool | Purpose |
+|---|---|
+| `MediaQuery` | Reads device-level metrics (screen width/height, orientation, pixel ratio, padding) |
+| `LayoutBuilder` | Reads parent **constraint** width to build different widget trees |
+
+The screen is divided into six live sections, each highlighting a different technique:
+
+| Section | Technique used | Behaviour |
+|---|---|---|
+| **Hero Banner** | `MediaQuery` | Height = 18 % of screen height, clamped 110–200 px |
+| **Stats Grid** | `MediaQuery` breakpoint | 2 columns on mobile, 4 on tablet/desktop |
+| **Grid vs List** | `LayoutBuilder` constraints | 1 col → list; 2 col → grid at 600 px; 3–4 col at 900 px |
+| **Orientation Panel** | `MediaQuery` orientation | Column in portrait, Row in landscape |
+| **Proportional Bars** | `MediaQuery` | Containers sized at 80 %, 60 %, 40 % of screen width |
+| **Device Info Card** | `MediaQuery` | Live table of all MediaQueryData values |
+
+---
+
+### Key Code Snippets
+
+#### 1. Reading device metrics with `MediaQuery`
+
+```dart
+final mq          = MediaQuery.of(context);
+final screenWidth  = mq.size.width;
+final screenHeight = mq.size.height;
+final isLandscape  = mq.orientation == Orientation.landscape;
+final isTablet     = screenWidth >= 600;
+```
+
+#### 2. Proportional sizing with `MediaQuery`
+
+```dart
+// Hero banner — 18 % of screen height, never below 110 or above 200 px
+AnimatedContainer(
+  height: (screenHeight * 0.18).clamp(110.0, 200.0),
+  width: double.infinity,
+  ...
+)
+
+// Bar — 80 % of screen width
+Container(width: screenWidth * 0.8, ...)
+```
+
+#### 3. Conditional columns with `MediaQuery` breakpoints
+
+```dart
+// Stats grid switches between 2-col (mobile) and 4-col (tablet/desktop)
+final cols = isDesktop ? 4 : isTablet ? 4 : 2;
+
+GridView.builder(
+  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: cols,
+    ...
+  ),
+  ...
+)
+```
+
+#### 4. Different widget trees with `LayoutBuilder`
+
+```dart
+LayoutBuilder(
+  builder: (context, constraints) {
+    final w = constraints.maxWidth;          // parent box width, not screen width
+
+    final cols = w >= 900
+        ? (isLandscape ? 4 : 3)
+        : w >= 600
+            ? 2
+            : 1;
+
+    return cols == 1 ? const _PickupList() : _PickupGrid(cols: cols);
+  },
+)
+```
+
+#### 5. Orientation-aware layout
+
+```dart
+// Portrait  → Column  |  Landscape → Row
+if (isLandscape) {
+  return Row(
+    children: [Expanded(child: panel1), ..., Expanded(child: panel3)],
+  );
+} else {
+  return Column(children: [panel1, panel2]);
+}
+```
+
+#### 6. Adaptive padding & font sizes
+
+```dart
+// All spacing and font sizes scale with the isTablet flag
+padding: EdgeInsets.all(isTablet ? 24 : 16),
+fontSize: isTablet ? 26 : 20,
+```
+
+---
+
+### Screenshots
+
+> **Mobile portrait (< 600 px)**
+>
+> *(Single-column list, 2-col stats grid, portrait panel)*
+
+> **Tablet portrait (≥ 600 px)**
+>
+> *(2-column pickup grid, 4-col stats, larger fonts & padding)*
+
+> **Tablet landscape (≥ 900 px)**
+>
+> *(3–4 column grid, Row orientation panel, full-width hero)*
+
+---
+
+### Reflection
+
+**1. Why is responsiveness important in mobile development?**
+
+Users open apps on devices ranging from 320 px compact phones to 1280 px foldables and tablets. Hard-coded pixel values break layouts on any device they weren't designed for. Responsive design means the same codebase delivers a comfortable, overflow-free experience everywhere — directly impacting retention and accessibility.
+
+**2. How does `LayoutBuilder` differ from `MediaQuery`?**
+
+`MediaQuery.of(context).size` gives the **entire device screen** dimensions — it is a global value unaffected by padding, navigation bars, or parent containers. `LayoutBuilder` gives the **available width of the immediate parent widget**. This matters inside `Column`, `Drawer`, or `SliverList` where the parent is narrower than the full screen. Use `MediaQuery` for global decisions (overall breakpoint, orientation) and `LayoutBuilder` for local, context-aware decisions (how many columns fit inside *this* card or panel).
+
+**3. How could your team use these tools to scale the app design efficiently?**
+
+- Define shared breakpoint constants (`_BP.mobile`, `_BP.tablet`) in a single file so every screen uses identical thresholds.
+- Build responsive wrappers (e.g. `ResponsiveGrid`) as reusable widgets so individual screens declare *what* to show, not *how* to arrange it.
+- `LayoutBuilder` inside `CustomCard` lets the card reflow its own internal layout independently of the parent screen — no extra props needed.
+- Combine with `OrientationBuilder` for targeted landscape-only changes without duplicating full screen code.
+
+---
+
 ## Running locally
 
 ```bash

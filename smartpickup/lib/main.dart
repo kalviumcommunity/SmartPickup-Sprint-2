@@ -10,6 +10,8 @@ import 'screens/user_input_form.dart';
 import 'screens/state_management_demo.dart';
 import 'screens/custom_widgets_demo.dart';
 import 'screens/responsive_home.dart';
+import 'screens/animated_splash_screen.dart';
+import 'screens/animations_demo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,8 +37,8 @@ class SmartPickupApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
       ),
 
-      /// 🔹 First screen
-      home: const LoginScreen(),
+      /// 🔹 First screen — animated splash then login
+      home: const AnimatedSplashScreen(),
 
       /// 🔹 Routes
       routes: {
@@ -47,6 +49,7 @@ class SmartPickupApp extends StatelessWidget {
         '/state-demo': (context) => const StateManagementDemo(),
         '/widgets-demo': (context) => const CustomWidgetsDemo(),
         '/responsive': (context) => const ResponsiveHome(),
+        '/animations': (context) => const AnimationsDemo(),
       },
     );
   }

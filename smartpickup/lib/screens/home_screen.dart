@@ -4,6 +4,7 @@ import '../services/auth_service.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/info_card.dart';
 import 'login_screen.dart';
+import 'animations_demo.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -97,6 +98,17 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.devices,
                   color: Colors.deepPurple,
                   onPressed: () => Navigator.pushNamed(context, '/responsive'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: CustomButton(
+                  label: 'Open Animations Demo',
+                  icon: Icons.animation,
+                  color: Colors.pinkAccent,
+                  // Use custom animated slide transition
+                  onPressed: () =>
+                      Navigator.push(context, animationsDemoRoute()),
                 ),
               ),
 

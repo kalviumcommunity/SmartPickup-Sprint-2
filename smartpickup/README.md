@@ -491,6 +491,205 @@ Users open apps on devices ranging from 320 px compact phones to 1280 px foldabl
 
 ---
 
+## Sprint 2 – Animations & Transitions
+
+### What was implemented
+
+Two new screens bring animations to SmartPickup:
+
+| File | Purpose |
+|---|---|
+| `lib/screens/animated_splash_screen.dart` | Explicit staggered splash with slide-up transition to Login |
+| `lib/screens/animations_demo.dart` | 8 interactive demos covering implicit & explicit animations |
+
+The home screen now navigates to the animations demo via a **custom `PageRouteBuilder` slide transition** instead of the default push.
+
+---
+
+### Animations at a Glance
+
+| # | Widget / Technique | Type | What it shows |
+|---|---|---|---|
+| 1 | `AnimatedContainer` | Implicit | Smooth size, colour & border-radius change on tap |
+| 2 | `AnimatedOpacity` | Implicit | Logo fades in/out over 800 ms |
+| 3 | `AnimatedCrossFade` | Implicit | Cross-fade between "Booked" and "Completed" states |
+| 4 | `AnimatedSwitcher` | Implicit | Counter digits scale-swap on every increment |
+| 5 | `RotationTransition` | Explicit | `AnimationController.repeat()` spins the app logo |
+| 6 | `SlideTransition` | Explicit | Card slides in from the left with `easeOutCubic` |
+| 7 | `ScaleTransition` + `FadeTransition` | Explicit | Badge pops in with `elasticOut` + `easeIn` together |
+| 8 | Staggered list | Explicit | Items slide + fade in with staggered `Interval()` |
+| Splash | Multi-stage explicit | Explicit | Logo scale, text slide-up, icon row pop-in, bouncing dots |
+| Navigation | `PageRouteBuilder` | Page transition | Slide-from-right when opening Animations Demo |
+
+---
+
+### Key Code Snippets
+
+#### 1. Implicit — `AnimatedContainer`
+
+```dart
+AnimatedContainer(
+  duration: const Duration(milliseconds: 600),
+  curve: Curves.easeInOut,
+  width:  _toggled ? 220 : 110,
+  color:  _toggled ? Colors.teal : Colors.green,
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(_toggled ? 55 : 16),
+  ),
+)
+```
+
+#### 2. Implicit — `AnimatedOpacity`
+
+```dart
+AnimatedOpacity(
+  opacity: _visible ? 1.0 : 0.05,
+  duration: const Duration(milliseconds: 800),
+  curve: Curves.easeInOut,
+  child: Image.asset('assets/images/logo.png', width: 100),
+)
+```
+
+#### 3. Implicit — `AnimatedCrossFade`
+
+```dart
+AnimatedCrossFade(
+  duration: const Duration(milliseconds: 500),
+  crossFadeState: _showFirst
+      ? CrossFadeState.showFirst
+      : CrossFadeState.showSecond,
+  firstChild:  BookedCard(),
+  secondChild: CompletedCard(),
+)
+```
+
+#### 4. Explicit — `RotationTransition`
+
+```dart
+// Controller declared in State
+_ctrl = AnimationController(
+  vsync: this,
+  duration: const Duration(seconds: 3),
+)..repeat();   // ← repeats indefinitely
+
+RotationTransition(
+  turns: _ctrl,
+  child: Image.asset('assets/images/logo.png', width: 90),
+)
+```
+
+#### 5. Explicit — `SlideTransition` with `Tween`
+
+```dart
+_offset = Tween<Offset>(
+  begin: const Offset(-1.2, 0.0),
+  end:   Offset.zero,
+).animate(
+  CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic),
+);
+
+SlideTransition(position: _offset, child: PickupCard())
+```
+
+#### 6. Explicit — Staggered list with `Interval`
+
+```dart
+// Each item starts 200 ms after the previous one
+final anim = Tween<Offset>(
+  begin: const Offset(0, 0.6),
+  end:   Offset.zero,
+).animate(
+  CurvedAnimation(
+    parent: _ctrl,
+    curve: Interval(i * 0.2, i * 0.2 + 0.5, curve: Curves.easeOutCubic),
+  ),
+);
+SlideTransition(position: anim, child: FadeTransition(opacity: fadeAnim, child: item))
+```
+
+#### 7. Page transition — `PageRouteBuilder`
+
+```dart
+// Used in home_screen.dart to navigate to AnimationsDemo
+Route<void> animationsDemoRoute() => PageRouteBuilder(
+  transitionDuration: const Duration(milliseconds: 500),
+  pageBuilder: (_, __, ___) => const AnimationsDemo(),
+  transitionsBuilder: (_, animation, __, child) => SlideTransition(
+    position: Tween<Offset>(
+      begin: const Offset(1.0, 0.0),
+      end:   Offset.zero,
+    ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
+    child: child,
+  ),
+);
+```
+
+#### 8. Splash screen — staggered explicit animations
+
+```dart
+// Each element uses a different Interval on the same controller
+_logoScale  = ... Interval(0.0, 0.4, curve: Curves.elasticOut)
+_textSlide  = ... Interval(0.2, 0.6, curve: Curves.easeOutCubic)
+_taglineFade= ... Interval(0.45, 0.75, curve: Curves.easeIn)
+_iconsScale = ... Interval(0.65, 1.0, curve: Curves.elasticOut)
+
+// Then navigate with a slide-up + fade transition to LoginScreen
+Navigator.of(context).pushReplacement(PageRouteBuilder(...))
+```
+
+---
+
+### Asset Registration (`pubspec.yaml`)
+
+```yaml
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+```
+
+---
+
+### Screenshots
+
+> **Animated Splash** — logo scales in, text slides up, icon row pops, bouncing dots
+>
+> **Animations Demo — AnimatedContainer** — tap box toggles size, colour & radius
+>
+> **Animations Demo — AnimatedOpacity** — logo fades in/out
+>
+> **Animations Demo — SlideTransition** — card slides in from left
+>
+> **Animations Demo — Staggered list** — items appear one after another
+
+---
+
+### Reflection
+
+**1. Why are animations important for UX?**
+
+Animations serve as *visual communication* — they confirm that an action was registered, guide the eye to what changed, and make state transitions feel gradual and predictable rather than jarring. Research consistently shows that well-timed micro-animations (200–500 ms) increase perceived performance and user confidence, even when the actual response time is unchanged.
+
+**2. What are the differences between implicit and explicit animations?**
+
+| | Implicit | Explicit |
+|---|---|---|
+| **How** | Flutter animates automatically when a property changes inside `setState()` | You drive a `AnimationController` manually |
+| **Widgets** | `AnimatedContainer`, `AnimatedOpacity`, `AnimatedCrossFade`, `AnimatedSwitcher` | `SlideTransition`, `RotationTransition`, `ScaleTransition`, `FadeTransition` |
+| **Use case** | Simple one-property changes triggered by state | Complex, sequenced, repeating, or multi-property animations |
+| **Boilerplate** | Minimal — just set `duration` + `curve` | Requires controller lifecycle (`initState` / `dispose`) |
+
+**3. How can you apply animations effectively in your team's main app project?**
+
+- Use **`AnimatedSwitcher`** for counter/badge updates (already in `state_management_demo.dart`).
+- Use **`AnimatedContainer`** for card expand/collapse (e.g., pickup detail view).
+- Add **`PageRouteBuilder`** slide transitions globally by wrapping `MaterialApp` with a custom `onGenerateRoute`.
+- Use **staggered list animations** when loading Firestore pickup history so items appear smoothly rather than all at once.
+- Keep all durations ≤ 600 ms and prefer `Curves.easeInOut` / `Curves.easeOutCubic` for natural motion.
+
+---
+
 ## Running locally
 
 ```bash

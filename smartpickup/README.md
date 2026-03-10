@@ -700,4 +700,163 @@ flutter run          # connects to a running emulator / device
 flutter run -d linux # run on the Linux desktop target
 ```
 
+---
+
+## Sprint 2 – Writing Data to Firestore (Add, Set, Update, Delete)
+
+### What was implemented
+
+| File | Purpose |
+|---|---|
+| `lib/services/task_service.dart` | All Firestore write operations in one service class |
+| `lib/screens/firestore_writes_demo.dart` | Full UI — add form, live list, edit sheet, delete confirm |
+
+---
+
+### Firestore Write Operations Explained
+
+| Operation | Method | When to use |
+|---|---|---|
+| **Add** | `.collection().add({})` | Creates a new document with a Firestore-generated ID. Best for user-created records like tasks or pickups. |
+| **Set** | `.doc(id).set({})` | Writes a document to a **known ID** — overwrites entirely unless `SetOptions(merge: true)` is used. |
+| **Update** | `.doc(id).update({})` | Modifies **only the specified fields**, leaving the rest untouched. Safest for partial edits. |
+| **Delete** | `.doc(id).delete()` | Permanently removes a document. |
+
+---
+
+### Key Code Snippets
+
+#### `TaskService` — centralised write operations
+
+```dart
+class TaskService {
+  final _db = FirebaseFirestore.instance;
+
+  // ── ADD — auto-generated document ID ──────────────────────────────────
+  Future<DocumentReference> addTask({...}) async {
+    return _db.collection('tasks').add({
+      'uid': uid,
+      'title': title,
+      'description': description,
+      'priority': priority,
+      'isCompleted': false,
+      'createdAt': Timestamp.now(),
+      'updatedAt': Timestamp.now(),
+    });
+  }
+
+  // ── SET — write to a specific document ID ─────────────────────────────
+  Future<void> setTask({required String docId, ...}) async {
+    await _db.collection('tasks').doc(docId).set({ ... });
+  }
+
+  // ── UPDATE — only the changed fields ──────────────────────────────────
+  Future<void> updateTask({required String docId, String? title, ...}) async {
+    final Map<String, dynamic> data = {'updatedAt': Timestamp.now()};
+    if (title != null) data['title'] = title;
+    // ... other optional fields
+    await _db.collection('tasks').doc(docId).update(data);
+  }
+
+  // ── DELETE ─────────────────────────────────────────────────────────────
+  Future<void> deleteTask(String docId) =>
+      _db.collection('tasks').doc(docId).delete();
+
+  // ── STREAM — real-time listener ────────────────────────────────────────
+  Stream<QuerySnapshot> getTasks(String uid) => _db
+      .collection('tasks')
+      .where('uid', isEqualTo: uid)
+      .orderBy('createdAt', descending: true)
+      .snapshots();
+}
+```
+
+#### Form validation before writing
+
+```dart
+Future<void> _addTask() async {
+  if (!_addFormKey.currentState!.validate()) return; // ← validate first
+  setState(() => _adding = true);
+  try {
+    await _svc.addTask(
+      uid: _uid,
+      title: _titleCtrl.text.trim(),
+      description: _descCtrl.text.trim(),
+      priority: _selectedPriority.name,
+    );
+    _snack('✅ Task added to Firestore!', Colors.green);
+  } catch (e) {
+    _snack('❌ Error: $e', Colors.red);  // ← graceful error handling
+  } finally {
+    setState(() => _adding = false);
+  }
+}
+```
+
+#### Update in the edit bottom sheet
+
+```dart
+await _svc.updateTask(
+  docId: doc.id,
+  title: tCtrl.text.trim(),
+  description: dCtrl.text.trim(),
+  priority: priority.name,
+  // isCompleted not passed — field stays unchanged
+);
+```
+
+#### Toggle completion — minimal update
+
+```dart
+Future<void> toggleComplete(String docId, bool current) =>
+    updateTask(docId: docId, isCompleted: !current);
+// Only `isCompleted` and `updatedAt` are written — nothing else changes.
+```
+
+#### Real-time stream in the UI
+
+```dart
+StreamBuilder<QuerySnapshot>(
+  stream: _svc.getTasks(_uid),    // real-time Firestore snapshot
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting)
+      return CircularProgressIndicator();
+    final docs = snapshot.data?.docs ?? [];
+    return Column(children: docs.map((doc) => _TaskCard(...)).toList());
+  },
+)
+```
+
+---
+
+### Screenshots
+
+> **Add form** — title, description, priority selector, and validated submit button
+>
+> **Live task list** — tasks streamed in real-time from Firestore
+>
+> **Edit sheet** — bottom modal pre-filled with current values, saves via `.update()`
+>
+> **Delete confirm** — AlertDialog guards against accidental deletion
+>
+> **Firebase Console** — `tasks` collection with `createdAt`, `updatedAt`, `isCompleted`, `priority` fields
+
+---
+
+### Reflection
+
+**1. Why do secure writes matter?**
+
+Unchecked writes can corrupt your database: empty strings get stored as valid records, wrong types break queries, and overwriting with `.set()` instead of `.update()` can silently erase fields. Validating before every write, using correct `Timestamp` types, and preferring `.update()` over `.set()` for partial edits all prevent silent data corruption. Firestore Security Rules add a server-side layer so even malicious clients can't bypass validation.
+
+**2. What is the difference between `add`, `set`, and `update`?**
+
+- **`add()`** — lets Firestore generate a unique document ID automatically. Best for user-created records where you don't control the ID.
+- **`set()`** — writes to a document you name yourself. If the document exists it is **fully replaced** (unless `SetOptions(merge: true)` is passed). Use for deterministic IDs like `users/{uid}`.
+- **`update()`** — touches **only the fields you list**; all other fields are untouched. Safest for editing one property of a large document.
+
+**3. How does validation prevent data corruption?**
+
+Client-side `FormState.validate()` rejects empty strings and wrong formats before the network call is ever made — saving a round-trip and keeping the database clean. Server-side Firestore Rules provide a second line of defence, rejecting writes that don't match the expected schema even if the client-side check is bypassed. Together they ensure every document in the `tasks` collection always has `title`, `description`, `uid`, `createdAt`, and `isCompleted` with the correct types.
+
 ----

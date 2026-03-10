@@ -12,6 +12,7 @@ import 'screens/custom_widgets_demo.dart';
 import 'screens/responsive_home.dart';
 import 'screens/animated_splash_screen.dart';
 import 'screens/animations_demo.dart';
+import 'screens/firestore_writes_demo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,6 +51,7 @@ class SmartPickupApp extends StatelessWidget {
         '/widgets-demo': (context) => const CustomWidgetsDemo(),
         '/responsive': (context) => const ResponsiveHome(),
         '/animations': (context) => const AnimationsDemo(),
+        '/firestore-writes': (context) => const FirestoreWritesDemo(),
       },
     );
   }

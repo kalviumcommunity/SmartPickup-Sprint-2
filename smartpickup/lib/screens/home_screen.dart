@@ -5,6 +5,7 @@ import '../widgets/custom_button.dart';
 import '../widgets/info_card.dart';
 import 'login_screen.dart';
 import 'animations_demo.dart';
+import 'firestore_writes_demo.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -109,6 +110,16 @@ class HomeScreen extends StatelessWidget {
                   // Use custom animated slide transition
                   onPressed: () =>
                       Navigator.push(context, animationsDemoRoute()),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: CustomButton(
+                  label: 'Open Firestore Writes Demo',
+                  icon: Icons.cloud_upload_outlined,
+                  color: Colors.brown,
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/firestore-writes'),
                 ),
               ),
 
